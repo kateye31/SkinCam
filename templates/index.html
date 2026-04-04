@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkinCam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple: #613DC1;
+    --lavender: #9CA3DB;
+    --black: #0D160B;
+    --gray: #6b7280;
+    --gray-light: #f3f4f6;
+    --border: #e5e7eb;
+    --nav-h: 64px;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #fff;
+    color: var(--black);
+    min-height: 100vh;
+  }
+
+  /* ── FIXED NAV ── */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3rem;
+    height: var(--nav-h);
+    border-bottom: 1px solid var(--border);
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+
+  .nav-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--black);
+    cursor: pointer;
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+  }
+
+  .nav-logo em { font-style: italic; color: var(--purple); }
+
+  .nav-links { display: flex; align-items: center; gap: 1.75rem; }
+
+  .nav-links a {
+    font-size: 0.875rem;
+    color: var(--gray);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+
+  .nav-links a:hover { color: var(--black); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.25rem;
+    border-radius: 100px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn-primary { background: var(--purple); color: #fff; }
+  .btn-primary:hover { background: #5234a8; }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--black);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: #aaa; }
+
+  /* ── PAGES ── */
+  .page { display: none; min-height: 100vh; flex-direction: column; padding-top: var(--nav-h); }
+  .page.active { display: flex; }
+
+  /* ─────────────────────────────────────────────
+     LANDING
+  ───────────────────────────────────────────── */
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5rem 2rem 3rem;
+    max-width: 660px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--purple);
+    background: rgba(97,61,193,0.08);
+    border: 1px solid rgba(97,61,193,0.15);
+    padding: 0.3rem 0.85rem;
+    border-radius: 100px;
+    margin-bottom: 1.75rem;
+  }
+
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.75rem, 6vw, 4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--black);
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-title em { font-style: italic; color: var(--purple); }
+
+  .hero-body {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--gray);
+    line-height: 1.75;
+    margin-bottom: 2.25rem;
+    max-width: 460px;
+  }
+
+  .hero-cta { display: flex; gap: 0.75rem; justify-content: center; }
+  .btn-large { padding: 0.75rem 1.75rem; font-size: 0.95rem; }
+
+  /* Nearby doctors section */
+  .nearby-section {
+    border-top: 1px solid var(--border);
+    padding: 3rem;
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .nearby-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .nearby-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--black);
+    margin-bottom: 0.25rem;
+  }
+
+  .nearby-sub { font-size: 0.85rem; color: var(--gray); font-weight: 300; }
+
+  .location-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    color: var(--gray);
+    cursor: pointer;
+    background: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .location-pill:hover { border-color: var(--purple); color: var(--purple); }
+
+  .doctor-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .doctor-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.1rem 1.25rem;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+
+  .doctor-card:hover { border-color: var(--purple); background: rgba(97,61,193,0.02); }
+
+  .doctor-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .doctor-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(97,61,193,0.1);
+    border: 1px solid rgba(97,61,193,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .doctor-name { font-size: 0.875rem; font-weight: 500; color: var(--black); margin-bottom: 0.1rem; }
+  .doctor-spec { font-size: 0.75rem; color: var(--gray); }
+
+  .doctor-meta { display: flex; gap: 1rem; font-size: 0.75rem; color: var(--gray); flex-wrap: wrap; }
+
+  .doctor-meta span { display: flex; align-items: center; gap: 0.25rem; }
+
+  .rating { color: var(--black); font-weight: 500; }
+
+  .distance-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    background: rgba(97,61,193,0.07);
+    color: var(--purple);
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin-top: 0.6rem;
+  }
+
+  .nearby-note {
+    font-size: 0.78rem;
+    color: var(--gray);
+    font-weight: 300;
+    line-height: 1.6;
+    padding: 0.875rem 1rem;
+    background: var(--gray-light);
+    border-radius: 8px;
+  }
+
+  .disclaimer-strip {
+    border-top: 1px solid var(--border);
+    padding: 1.25rem 3rem;
+    font-size: 0.75rem;
+    color: var(--gray);
+    line-height: 1.6;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* ─────────────────────────────────────────────
+     AUTH
+  ───────────────────────────────────────────── */
+  .auth-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+  }
+
+  .auth-box { width: 100%; max-width: 400px; }
+
+  .auth-heading {
+    font-family: 'Fraunces', serif;
+    font-size: 1.75rem;
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    margin-bottom: 0.35rem;
+  }
+
+  .auth-sub { font-size: 0.875rem; color: var(--gray); margin-bottom: 2rem; font-weight: 300; }
+
+  .auth-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--gray-light);
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 1.75rem;
+  }
+
+  .auth-tab {
+    padding: 0.55rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--gray);
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 400;
+    transition: all 0.15s;
+  }
+
+  .auth-tab.active { background: #fff; color: var(--black); font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  .form-group { margin-bottom: 1rem; }
+
+  .form-label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--black); margin-bottom: 0.4rem; }
+
+  .form-input {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--black);
+    outline: none;
+    transition: border-color 0.15s;
+    background: #fff;
+  }
+
+  .form-input:focus { border-color: var(--purple); }
+  .form-input::placeholder { color: #ccc; }
+
+  .form-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--purple);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 0.25rem;
+    transition: background 0.15s;
+  }
+
+  .form-btn:hover { background: #5234a8; }
+
+  .form-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.25rem 0;
+    font-size: 0.78rem;
+    color: var(--gray);
+  }
+
+  .form-divider::before, .form-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .oauth-btn {
+    width: 100%;
+    padding: 0.65rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.875rem;
+    cursor: pointer;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    transition: background 0.15s;
+    color: var(--black);
+  }
+
+  .oauth-btn:hover { background: var(--gray-light); }
+
+  .auth-footer-note { font-size: 0.75rem; color: var(--gray); text-align: center; margin-top: 1.25rem; line-height: 1.5; }
+  .link { color: var(--purple); cursor: pointer; }
+
+  /* ─────────────────────────────────────────────
+     UPLOAD
+  ───────────────────────────────────────────── */
+  .upload-wrap {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    padding: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+    align-items: start;
+  }
+
+  .page-title { font-family: 'Fraunces', serif; font-size: 1.75rem; font-weight: 300; letter-spacing: -0.025em; margin-bottom: 0.35rem; }
+  .page-sub { font-size: 0.875rem; color: var(--gray); font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; }
+
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    padding: 2.5rem;
+    background: var(--gray-light);
+  }
+
+  .upload-zone:hover { border-color: var(--purple); background: rgba(97,61,193,0.04); }
+  .upload-zone.has-preview { padding: 0; background: transparent; border-style: solid; }
+  .upload-zone-icon { font-size: 2rem; margin-bottom: 0.25rem; }
+  .upload-zone-text { font-size: 0.9rem; font-weight: 500; color: var(--black); }
+  .upload-zone-sub { font-size: 0.78rem; color: var(--gray); }
+
+  .upload-preview-img { width: 100%; height: 100%; object-fit: cover; min-height: 240px; border-radius: 14px; display: none; }
+  .upload-zone.has-preview .upload-preview-img { display: block; }
+  .upload-zone.has-preview .upload-placeholder { display: none; }
+
+  .upload-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.75rem; }
+
+  .method-btn {
+    padding: 0.6rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.8rem;
+    color: var(--gray);
+    cursor: pointer;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.15s;
+    font-weight: 400;
+  }
+
+  .method-btn:hover { border-color: var(--purple); color: var(--purple); }
+
+  .panel-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--gray); margin-bottom: 0.65rem; }
+
+  .chip-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+
+  .chip {
+    padding: 0.4rem 0.85rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--gray);
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.15s;
+    font-weight: 400;
+  }
+
+  .chip:hover { border-color: var(--purple); color: var(--purple); }
+  .chip.selected { background: var(--purple); border-color: var(--purple); color: #fff; font-weight: 500; }
+
+  .upload-submit {
+    width: 100%;
+    padding: 0.8rem;
+    background: var(--purple);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.15s;
+  }
+
+  .upload-submit:hover { background: #5234a8; }
+
+  #file-input { display: none; }
+
+  /* ─────────────────────────────────────────────
+     PROCESSING
+  ───────────────────────────────────────────── */
+  .processing-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 3rem;
+    text-align: center;
+  }
+
+  .loader-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    border-top-color: var(--purple);
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .processing-title { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 300; letter-spacing: -0.02em; color: var(--black); }
+  .processing-sub { font-size: 0.875rem; color: var(--gray); font-weight: 300; }
+
+  .step-list { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; max-width: 300px; text-align: left; }
+
+  .step-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: #ccc; padding: 0.35rem 0; }
+  .step-item.done { color: var(--gray); }
+  .step-item.active { color: var(--black); font-weight: 500; }
+
+  .step-dot {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    flex-shrink: 0;
+    color: #ccc;
+  }
+
+  .step-item.done .step-dot { background: var(--purple); border-color: var(--purple); color: #fff; font-size: 0.6rem; }
+  .step-item.active .step-dot { border-color: var(--purple); color: var(--purple); }
+
+  .progress-bar { width: 100%; max-width: 300px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--purple); border-radius: 2px; width: 0; transition: width 0.6s ease; }
+
+  /* ─────────────────────────────────────────────
+     RESULTS
+  ───────────────────────────────────────────── */
+  .results-wrap {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 3rem;
+    padding: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+    align-items: start;
+  }
+
+  .result-img-box {
+    border-radius: 14px;
+    background: var(--gray-light);
+    border: 1px solid var(--border);
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .result-img-box span { font-size: 2rem; }
+  .result-img-box p { font-size: 0.78rem; color: var(--gray); }
+
+  .confidence-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .conf-score { font-family: 'Fraunces', serif; font-size: 2rem; font-weight: 300; color: var(--purple); letter-spacing: -0.02em; line-height: 1; }
+  .conf-name { font-size: 0.95rem; font-weight: 500; color: var(--black); }
+  .conf-alts { font-size: 0.75rem; color: var(--gray); margin-top: 0.15rem; }
+  .conf-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 0.75rem; overflow: hidden; }
+  .conf-fill { height: 100%; width: 78%; background: var(--purple); border-radius: 2px; }
+
+  .section-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray); margin-bottom: 0.85rem; }
+
+  .treatment-item { display: flex; gap: 0.85rem; padding: 0.875rem 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .treatment-item:last-child { border-bottom: none; }
+
+  .t-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--gray);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .t-name { font-size: 0.875rem; font-weight: 500; color: var(--black); margin-bottom: 0.15rem; }
+  .t-desc { font-size: 0.8rem; color: var(--gray); font-weight: 300; line-height: 1.5; }
+
+  .result-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+  .result-actions .btn { flex: 1; justify-content: center; border-radius: 8px; }
+
+  .result-disclaimer {
+    margin-top: 1.25rem;
+    padding: 0.875rem 1rem;
+    background: var(--gray-light);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* Results nearby strip */
+  .results-nearby {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* ─────────────────────────────────────────────
+     ACCOUNT
+  ───────────────────────────────────────────── */
+  .account-wrap {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .sidebar { border-right: 1px solid var(--border); padding: 2rem 1.25rem; display: flex; flex-direction: column; gap: 1.75rem; }
+
+  .avatar-block { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+
+  .avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: rgba(97,61,193,0.1);
+    border: 1px solid rgba(97,61,193,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem;
+    color: var(--purple);
+  }
+
+  .avatar-name { font-size: 0.9rem; font-weight: 500; color: var(--black); }
+  .avatar-email { font-size: 0.75rem; color: var(--gray); }
+
+  .sidebar-nav { display: flex; flex-direction: column; gap: 0.15rem; }
+
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--gray);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.15s;
+    text-align: left;
+    width: 100%;
+    font-weight: 400;
+  }
+
+  .sidebar-link:hover { background: var(--gray-light); color: var(--black); }
+  .sidebar-link.active { background: rgba(97,61,193,0.08); color: var(--purple); font-weight: 500; }
+
+  .account-main { padding: 2rem 2.5rem; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+
+  .stat-card { padding: 1rem; border: 1px solid var(--border); border-radius: 10px; }
+
+  .stat-val { font-family: 'Fraunces', serif; font-size: 1.75rem; font-weight: 300; color: var(--black); letter-spacing: -0.02em; line-height: 1; margin-bottom: 0.3rem; }
+  .stat-label { font-size: 0.75rem; color: var(--gray); }
+
+  .history-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .history-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .history-row:hover { border-color: var(--purple); background: rgba(97,61,193,0.03); }
+
+  .history-icon { width: 38px; height: 38px; border-radius: 8px; background: var(--gray-light); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .history-name { font-size: 0.875rem; font-weight: 500; color: var(--black); }
+  .history-meta { font-size: 0.75rem; color: var(--gray); margin-top: 0.1rem; }
+
+  .badge { padding: 0.25rem 0.65rem; border-radius: 100px; font-size: 0.7rem; font-weight: 500; margin-left: auto; flex-shrink: 0; }
+  .badge-mild { background: #ecfdf5; color: #16a34a; }
+  .badge-mod { background: #eff6ff; color: #2563eb; }
+  .badge-check { background: rgba(97,61,193,0.08); color: var(--purple); }
+
+  .chevron { color: #ccc; font-size: 0.9rem; margin-left: 0.25rem; }
+</style>
+</head>
+<body>
+
+<!-- ══════ FIXED NAV (always visible) ══════ -->
+<nav>
+  <div class="nav-logo" onclick="go('landing')">Skin<em>Cam</em></div>
+  <div class="nav-links">
+    <a onclick="go('upload')">Analyze</a>
+    <a onclick="scrollToNearby()">Find a doctor</a>
+    <a onclick="go('auth')">Log in</a>
+    <button class="btn btn-primary" onclick="go('auth')">Get started</button>
+  </div>
+</nav>
+
+
+<!-- ══════ LANDING ══════ -->
+<div class="page active" id="landing">
+  <section class="hero">
+    <div class="eyebrow">AI-powered skin analysis</div>
+    <h1 class="hero-title">Your skin,<br><em>analyzed</em> in seconds.</h1>
+    <p class="hero-body">Upload a photo of any skin concern and SkinCam's AI will identify potential conditions and suggest next steps — instantly.</p>
+    <div class="hero-cta">
+      <button class="btn btn-primary btn-large" onclick="go('upload')">Start free analysis →</button>
+      <button class="btn btn-outline btn-large" onclick="go('results')">View sample report</button>
+    </div>
+  </section>
+
+  <!-- Nearby doctors -->
+  <div class="nearby-section" id="nearby-section">
+    <div class="nearby-header">
+      <div>
+        <h2 class="nearby-title">Find a dermatologist near you</h2>
+        <p class="nearby-sub">SkinCam is a screening tool — always follow up with a qualified professional.</p>
+      </div>
+      <button class="location-pill" onclick="this.textContent='📍 Detecting…'; setTimeout(()=>this.textContent='📍 Orlando, FL',1200)">
+        📍 Use my location
+      </button>
+    </div>
+
+    <div class="doctor-grid">
+      <div class="doctor-card">
+        <div class="doctor-top">
+          <div class="doctor-avatar">👨‍⚕️</div>
+          <div>
+            <div class="doctor-name">Dr. Marcus Reid</div>
+            <div class="doctor-spec">Board-certified Dermatologist</div>
+          </div>
+        </div>
+        <div class="doctor-meta">
+          <span><span class="rating">4.9</span> ★ · 312 reviews</span>
+          <span>Orlando Health</span>
+        </div>
+        <div class="distance-badge">📍 0.8 mi away</div>
+      </div>
+
+      <div class="doctor-card">
+        <div class="doctor-top">
+          <div class="doctor-avatar">👩‍⚕️</div>
+          <div>
+            <div class="doctor-name">Dr. Priya Nair</div>
+            <div class="doctor-spec">Dermatology &amp; Skin Oncology</div>
+          </div>
+        </div>
+        <div class="doctor-meta">
+          <span><span class="rating">4.8</span> ★ · 198 reviews</span>
+          <span>AdventHealth</span>
+        </div>
+        <div class="distance-badge">📍 1.4 mi away</div>
+      </div>
+
+      <div class="doctor-card">
+        <div class="doctor-top">
+          <div class="doctor-avatar">👨‍⚕️</div>
+          <div>
+            <div class="doctor-name">Dr. Leon Torres</div>
+            <div class="doctor-spec">Pediatric &amp; Adult Dermatology</div>
+          </div>
+        </div>
+        <div class="doctor-meta">
+          <span><span class="rating">4.7</span> ★ · 145 reviews</span>
+          <span>Florida Skin Center</span>
+        </div>
+        <div class="distance-badge">📍 2.1 mi away</div>
+      </div>
+
+      <div class="doctor-card">
+        <div class="doctor-top">
+          <div class="doctor-avatar">👩‍⚕️</div>
+          <div>
+            <div class="doctor-name">Dr. Amara Osei</div>
+            <div class="doctor-spec">Cosmetic &amp; Medical Dermatology</div>
+          </div>
+        </div>
+        <div class="doctor-meta">
+          <span><span class="rating">4.9</span> ★ · 267 reviews</span>
+          <span>UCF Health</span>
+        </div>
+        <div class="distance-badge">📍 2.6 mi away</div>
+      </div>
+
+      <div class="doctor-card">
+        <div class="doctor-top">
+          <div class="doctor-avatar">👨‍⚕️</div>
+          <div>
+            <div class="doctor-name">Dr. James Whitfield</div>
+            <div class="doctor-spec">Dermatopathology</div>
+          </div>
+        </div>
+        <div class="doctor-meta">
+          <span><span class="rating">4.6</span> ★ · 89 reviews</span>
+          <span>Nemours Children's</span>
+        </div>
+        <div class="distance-badge">📍 3.0 mi away</div>
+      </div>
+
+      <div class="doctor-card">
+        <div class="doctor-top">
+          <div class="doctor-avatar">👩‍⚕️</div>
+          <div>
+            <div class="doctor-name">Dr. Sofia Vega</div>
+            <div class="doctor-spec">General Dermatology</div>
+          </div>
+        </div>
+        <div class="doctor-meta">
+          <span><span class="rating">4.8</span> ★ · 201 reviews</span>
+          <span>CentraCare Clinic</span>
+        </div>
+        <div class="distance-badge">📍 3.5 mi away</div>
+      </div>
+    </div>
+
+    <p class="nearby-note">
+      Doctor listings are for reference only. SkinCam does not endorse specific providers. Always verify availability and credentials before booking an appointment.
+    </p>
+  </div>
+
+  <div class="disclaimer-strip">
+    <strong>Disclaimer:</strong> SkinCam is an informational tool only and does not provide medical diagnoses. Results should not replace the advice of a qualified healthcare professional. Always consult a licensed dermatologist.
+  </div>
+</div>
+
+
+<!-- ══════ AUTH ══════ -->
+<div class="page" id="auth">
+  <div class="auth-wrap">
+    <div class="auth-box">
+      <h1 class="auth-heading">Welcome back</h1>
+      <p class="auth-sub">Log in or create your free account.</p>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Log in</button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Sign up</button>
+      </div>
+
+      <div id="login-form">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" placeholder="you@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" placeholder="••••••••">
+        </div>
+        <button class="form-btn" onclick="go('landing')">Log in →</button>
+        <div class="form-divider">or</div>
+        <button class="oauth-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          Continue with Google
+        </button>
+      </div>
+
+      <div id="signup-form" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+          <div class="form-group">
+            <label class="form-label">First name</label>
+            <input type="text" class="form-input" placeholder="Alex">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last name</label>
+            <input type="text" class="form-input" placeholder="Smith">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" placeholder="you@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" placeholder="Create a password">
+        </div>
+        <button class="form-btn" onclick="go('landing')">Create account →</button>
+        <div class="form-divider">or</div>
+        <button class="oauth-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          Continue with Google
+        </button>
+      </div>
+
+      <p class="auth-footer-note">By continuing you agree to our <span class="link">Terms</span> and <span class="link">Privacy Policy</span>.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════ UPLOAD ══════ -->
+<div class="page" id="upload">
+  <input type="file" id="file-input" accept="image/*" onchange="handleUpload(event)">
+
+  <div class="upload-wrap">
+    <div>
+      <h1 class="page-title">Upload a photo</h1>
+      <p class="page-sub">Use a clear, well-lit image of the affected skin area for best results.</p>
+
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+        <div class="upload-placeholder">
+          <div class="upload-zone-icon">🖼</div>
+          <div class="upload-zone-text">Click or drag to upload</div>
+          <div class="upload-zone-sub">JPG, PNG, HEIC — up to 20 MB</div>
+        </div>
+        <img class="upload-preview-img" id="preview-img" src="" alt="Preview">
+      </div>
+
+      <div class="upload-methods">
+        <button class="method-btn" onclick="document.getElementById('file-input').click()">📁 Choose file</button>
+        <button class="method-btn">📷 Use camera</button>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="page-title" style="font-size:1.35rem;margin-bottom:0.35rem;">Describe your symptoms</h2>
+      <p class="page-sub">Select any that apply to improve accuracy.</p>
+
+      <div class="panel-label">Symptoms</div>
+      <div class="chip-grid">
+        <button class="chip" onclick="toggleChip(this)">Itching</button>
+        <button class="chip" onclick="toggleChip(this)">Redness</button>
+        <button class="chip" onclick="toggleChip(this)">Dry / flaky</button>
+        <button class="chip" onclick="toggleChip(this)">Swelling</button>
+        <button class="chip" onclick="toggleChip(this)">Blistering</button>
+        <button class="chip" onclick="toggleChip(this)">Burning</button>
+        <button class="chip" onclick="toggleChip(this)">Pain / tender</button>
+        <button class="chip" onclick="toggleChip(this)">Oozing</button>
+        <button class="chip" onclick="toggleChip(this)">Discoloration</button>
+      </div>
+
+      <div class="panel-label">Affected area</div>
+      <div class="chip-grid">
+        <button class="chip" onclick="toggleChip(this)">Face</button>
+        <button class="chip" onclick="toggleChip(this)">Scalp</button>
+        <button class="chip" onclick="toggleChip(this)">Arms</button>
+        <button class="chip" onclick="toggleChip(this)">Torso</button>
+        <button class="chip" onclick="toggleChip(this)">Legs</button>
+        <button class="chip" onclick="toggleChip(this)">Hands</button>
+        <button class="chip" onclick="toggleChip(this)">Back</button>
+        <button class="chip" onclick="toggleChip(this)">Feet</button>
+      </div>
+
+      <div class="panel-label">Duration</div>
+      <div class="chip-grid" id="dur-group">
+        <button class="chip" onclick="selectOne(this,'dur-group')">Days</button>
+        <button class="chip" onclick="selectOne(this,'dur-group')">Weeks</button>
+        <button class="chip" onclick="selectOne(this,'dur-group')">Months</button>
+        <button class="chip" onclick="selectOne(this,'dur-group')">Years</button>
+      </div>
+
+      <button class="upload-submit" onclick="startProcessing()">Analyze my skin →</button>
+      <p style="font-size:0.73rem;color:var(--gray);text-align:center;margin-top:0.75rem;line-height:1.5;">Your photo is processed privately. Results are informational only.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════ PROCESSING ══════ -->
+<div class="page" id="processing">
+  <div class="processing-wrap">
+    <div class="loader-ring"></div>
+
+    <div>
+      <h2 class="processing-title">Analyzing your skin…</h2>
+      <p class="processing-sub">This usually takes 8–12 seconds.</p>
+    </div>
+
+    <div class="step-list">
+      <div class="step-item done" id="s1"><div class="step-dot">✓</div> Image uploaded</div>
+      <div class="step-item active" id="s2"><div class="step-dot">◉</div> Running visual model</div>
+      <div class="step-item" id="s3"><div class="step-dot">3</div> Cross-referencing symptoms</div>
+      <div class="step-item" id="s4"><div class="step-dot">4</div> Generating report</div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog-fill"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════ RESULTS ══════ -->
+<div class="page" id="results">
+  <div class="results-wrap">
+    <div>
+      <h1 class="page-title" style="margin-bottom:0.35rem;">Analysis complete</h1>
+      <p class="page-sub">AI assessment — consult a dermatologist to confirm.</p>
+
+      <div class="result-img-box">
+        <span>🖼</span>
+        <p>Uploaded image</p>
+      </div>
+
+      <div class="confidence-row">
+        <div class="conf-score">78%</div>
+        <div style="flex:1;">
+          <div class="conf-name">Atopic Eczema</div>
+          <div class="conf-alts">Also: Contact Dermatitis (14%) · Psoriasis (5%)</div>
+          <div class="conf-bar"><div class="conf-fill"></div></div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.82rem;">
+        <div style="padding:0.75rem;border:1px solid var(--border);border-radius:8px;">
+          <div style="color:var(--gray);margin-bottom:0.2rem;font-size:0.72rem;">Type</div>
+          <div style="font-weight:500;">Inflammatory</div>
+        </div>
+        <div style="padding:0.75rem;border:1px solid var(--border);border-radius:8px;">
+          <div style="color:var(--gray);margin-bottom:0.2rem;font-size:0.72rem;">Severity</div>
+          <div style="font-weight:500;color:#16a34a;">Mild – Moderate</div>
+        </div>
+        <div style="padding:0.75rem;border:1px solid var(--border);border-radius:8px;">
+          <div style="color:var(--gray);margin-bottom:0.2rem;font-size:0.72rem;">Contagious</div>
+          <div style="font-weight:500;color:#16a34a;">No</div>
+        </div>
+        <div style="padding:0.75rem;border:1px solid var(--border);border-radius:8px;">
+          <div style="color:var(--gray);margin-bottom:0.2rem;font-size:0.72rem;">Common in</div>
+          <div style="font-weight:500;">All ages</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-label" style="margin-top:0.5rem;">Matched symptoms</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.35rem;margin-bottom:1.5rem;">
+        <span style="padding:0.3rem 0.7rem;border-radius:100px;font-size:0.75rem;background:rgba(97,61,193,0.08);color:var(--purple);border:1px solid rgba(97,61,193,0.15);">Itching</span>
+        <span style="padding:0.3rem 0.7rem;border-radius:100px;font-size:0.75rem;background:rgba(97,61,193,0.08);color:var(--purple);border:1px solid rgba(97,61,193,0.15);">Redness</span>
+        <span style="padding:0.3rem 0.7rem;border-radius:100px;font-size:0.75rem;background:rgba(97,61,193,0.08);color:var(--purple);border:1px solid rgba(97,61,193,0.15);">Dry / flaky</span>
+        <span style="padding:0.3rem 0.7rem;border-radius:100px;font-size:0.75rem;background:rgba(97,61,193,0.08);color:var(--purple);border:1px solid rgba(97,61,193,0.15);">Burning</span>
+      </div>
+
+      <div class="section-label">Suggested treatments</div>
+      <div>
+        <div class="treatment-item">
+          <div class="t-num">1</div>
+          <div>
+            <div class="t-name">Topical corticosteroids</div>
+            <div class="t-desc">Low-potency cream (e.g. hydrocortisone 1%) applied 1–2× daily during flares.</div>
+          </div>
+        </div>
+        <div class="treatment-item">
+          <div class="t-num">2</div>
+          <div>
+            <div class="t-name">Emollient / moisturiser</div>
+            <div class="t-desc">Fragrance-free (e.g. CeraVe, Eucerin) applied regularly to restore skin barrier.</div>
+          </div>
+        </div>
+        <div class="treatment-item">
+          <div class="t-num">3</div>
+          <div>
+            <div class="t-name">Avoid known triggers</div>
+            <div class="t-desc">Soaps, detergents, stress, and certain fabrics are common triggers.</div>
+          </div>
+        </div>
+        <div class="treatment-item">
+          <div class="t-num">4</div>
+          <div>
+            <div class="t-name">Consult a dermatologist</div>
+            <div class="t-desc">For persistent symptoms, a prescription treatment may be needed.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn btn-outline" onclick="go('upload')">New scan</button>
+        <button class="btn btn-primary" onclick="go('account')">Save to history →</button>
+      </div>
+
+      <div class="result-disclaimer">
+        <strong>Disclaimer:</strong> These results are AI-generated and are not a medical diagnosis. Always consult a qualified healthcare provider.
+      </div>
+    </div>
+  </div>
+
+  <!-- Nearby doctors on results page too -->
+  <div class="results-nearby">
+    <div class="nearby-header">
+      <div>
+        <h2 class="nearby-title">See a dermatologist near you</h2>
+        <p class="nearby-sub">Don't rely solely on AI — book an appointment with a professional.</p>
+      </div>
+      <button class="location-pill">📍 Orlando, FL</button>
+    </div>
+
+    <div class="doctor-grid">
+      <div class="doctor-card">
+        <div class="doctor-top">
+          <div class="doctor-avatar">👨‍⚕️</div>
+          <div>
+            <div class="doctor-name">Dr. Marcus Reid</div>
+            <div class="doctor-spec">Board-certified Dermatologist</div>
+          </div>
+        </div>
+        <div class="doctor-meta">
+          <span><span class="rating">4.9</span> ★ · 312 reviews</span>
+          <span>Orlando Health</span>
+        </div>
+        <div class="distance-badge">📍 0.8 mi away</div>
+      </div>
+
+      <div class="doctor-card">
+        <div class="doctor-top">
+          <div class="doctor-avatar">👩‍⚕️</div>
+          <div>
+            <div class="doctor-name">Dr. Priya Nair</div>
+            <div class="doctor-spec">Dermatology &amp; Skin Oncology</div>
+          </div>
+        </div>
+        <div class="doctor-meta">
+          <span><span class="rating">4.8</span> ★ · 198 reviews</span>
+          <span>AdventHealth</span>
+        </div>
+        <div class="distance-badge">📍 1.4 mi away</div>
+      </div>
+
+      <div class="doctor-card">
+        <div class="doctor-top">
+          <div class="doctor-avatar">👨‍⚕️</div>
+          <div>
+            <div class="doctor-name">Dr. Leon Torres</div>
+            <div class="doctor-spec">Pediatric &amp; Adult Dermatology</div>
+          </div>
+        </div>
+        <div class="doctor-meta">
+          <span><span class="rating">4.7</span> ★ · 145 reviews</span>
+          <span>Florida Skin Center</span>
+        </div>
+        <div class="distance-badge">📍 2.1 mi away</div>
+      </div>
+    </div>
+
+    <p class="nearby-note">Doctor listings are for reference only. SkinCam does not endorse specific providers. Always verify availability and credentials before booking.</p>
+  </div>
+</div>
+
+
+<!-- ══════ ACCOUNT ══════ -->
+<div class="page" id="account">
+  <div class="account-wrap">
+    <div class="sidebar">
+      <div class="avatar-block">
+        <div class="avatar">A</div>
+        <div class="avatar-name">Alex Johnson</div>
+        <div class="avatar-email">alex@email.com</div>
+      </div>
+      <div class="sidebar-nav">
+        <button class="sidebar-link active">📋 Scan history</button>
+        <button class="sidebar-link">👤 Profile</button>
+        <button class="sidebar-link">🔒 Privacy &amp; data</button>
+        <button class="sidebar-link">⚙️ Settings</button>
+        <button class="sidebar-link" onclick="go('landing')" style="margin-top:1rem;">← Log out</button>
+      </div>
+    </div>
+
+    <div class="account-main">
+      <h1 class="page-title" style="margin-bottom:0.25rem;">Scan history</h1>
+      <p class="page-sub">Your previous SkinCam analyses.</p>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-val">7</div>
+          <div class="stat-label">Total scans</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">3</div>
+          <div class="stat-label">Conditions flagged</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">Jan '25</div>
+          <div class="stat-label">Member since</div>
+        </div>
+      </div>
+
+      <div class="history-list">
+        <div class="history-row" onclick="go('results')">
+          <div class="history-icon">🔬</div>
+          <div style="flex:1;">
+            <div class="history-name">Atopic Eczema — forearm</div>
+            <div class="history-meta">March 26, 2026 · 78% confidence</div>
+          </div>
+          <span class="badge badge-mild">Mild</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="history-row" onclick="go('results')">
+          <div class="history-icon">🔬</div>
+          <div style="flex:1;">
+            <div class="history-name">Contact Dermatitis — wrist</div>
+            <div class="history-meta">February 14, 2026 · 83% confidence</div>
+          </div>
+          <span class="badge badge-mod">Moderate</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="history-row" onclick="go('results')">
+          <div class="history-icon">🔬</div>
+          <div style="flex:1;">
+            <div class="history-name">Acne vulgaris — face</div>
+            <div class="history-meta">January 30, 2026 · 91% confidence</div>
+          </div>
+          <span class="badge badge-mild">Mild</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="history-row" onclick="go('results')">
+          <div class="history-icon">🔬</div>
+          <div style="flex:1;">
+            <div class="history-name">Tinea versicolor — back</div>
+            <div class="history-meta">January 8, 2026 · 72% confidence</div>
+          </div>
+          <span class="badge badge-check">Review</span>
+          <span class="chevron">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function go(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+    if (id === 'processing') runProcessing();
+  }
+
+  function scrollToNearby() {
+    go('landing');
+    setTimeout(() => {
+      document.getElementById('nearby-section').scrollIntoView({ behavior: 'smooth' });
+    }, 50);
+  }
+
+  function switchTab(tab) {
+    document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
+    document.getElementById('signup-form').style.display = tab === 'signup' ? 'block' : 'none';
+    document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+    document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+  }
+
+  function handleUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('preview-img').src = ev.target.result;
+      document.getElementById('upload-zone').classList.add('has-preview');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  const zone = document.getElementById('upload-zone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = 'var(--purple)'; });
+  zone.addEventListener('dragleave', () => { zone.style.borderColor = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.style.borderColor = '';
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const r = new FileReader();
+      r.onload = ev => {
+        document.getElementById('preview-img').src = ev.target.result;
+        zone.classList.add('has-preview');
+      };
+      r.readAsDataURL(file);
+    }
+  });
+
+  function toggleChip(el) { el.classList.toggle('selected'); }
+
+  function selectOne(el, groupId) {
+    document.querySelectorAll('#' + groupId + ' .chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function startProcessing() { go('processing'); }
+
+  function runProcessing() {
+    ['s1','s2','s3','s4'].forEach(id => document.getElementById(id).classList.remove('done','active'));
+    document.getElementById('s1').classList.add('done');
+    document.getElementById('s2').classList.add('active');
+
+    const fill = document.getElementById('prog-fill');
+    fill.style.width = '30%';
+
+    setTimeout(() => {
+      document.getElementById('s2').classList.remove('active');
+      document.getElementById('s2').classList.add('done');
+      document.getElementById('s3').classList.add('active');
+      fill.style.width = '65%';
+    }, 1600);
+
+    setTimeout(() => {
+      document.getElementById('s3').classList.remove('active');
+      document.getElementById('s3').classList.add('done');
+      document.getElementById('s4').classList.add('active');
+      fill.style.width = '90%';
+    }, 3200);
+
+    setTimeout(() => go('results'), 4800);
+  }
+</script>
+</body>
+</html>
