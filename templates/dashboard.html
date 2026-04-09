@@ -1,0 +1,90 @@
+
+<nav>
+      <a href = "/" class = "nav-logo">Skin<em>Cam</em></div>
+  <div class="nav-links">
+    <a href= "/">Analyze</a>
+    <a href="/">Find a doctor</a>
+    <a href="/">Log in</a>
+    <button class="btn btn-primary" onclick = "window.location.href='/auth'">Get started</button>
+  </div>
+</nav>
+
+
+<!-- ══════ ACCOUNT ══════ -->
+<div class="page" id="account">
+  <div class="account-wrap">
+    <div class="sidebar">
+      <div class="avatar-block">
+        <div class="avatar">A</div>
+        <div class="avatar-name">Alex Johnson</div>
+        <div class="avatar-email">alex@email.com</div>
+      </div>
+      <div class="sidebar-nav">
+        <button class="sidebar-link active">📋 Scan history</button>
+        <button class="sidebar-link">👤 Profile</button>
+        <button class="sidebar-link">🔒 Privacy &amp; data</button>
+        <button class="sidebar-link">⚙️ Settings</button>
+        <button class="sidebar-link" onclick="go('landing')" style="margin-top:1rem;">← Log out</button>
+      </div>
+    </div>
+
+    <div class="account-main">
+      <h1 class="page-title" style="margin-bottom:0.25rem;">Scan history</h1>
+      <p class="page-sub">Your previous SkinCam analyses.</p>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-val">7</div>
+          <div class="stat-label">Total scans</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">3</div>
+          <div class="stat-label">Conditions flagged</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">Jan '25</div>
+          <div class="stat-label">Member since</div>
+        </div>
+      </div>
+
+      <div class="history-list">
+        <div class="history-row" onclick="go('results')">
+          <div class="history-icon">🔬</div>
+          <div style="flex:1;">
+            <div class="history-name">Atopic Eczema — forearm</div>
+            <div class="history-meta">March 26, 2026 · 78% confidence</div>
+          </div>
+          <span class="badge badge-mild">Mild</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="history-row" onclick="go('results')">
+          <div class="history-icon">🔬</div>
+          <div style="flex:1;">
+            <div class="history-name">Contact Dermatitis — wrist</div>
+            <div class="history-meta">February 14, 2026 · 83% confidence</div>
+          </div>
+          <span class="badge badge-mod">Moderate</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="history-row" onclick="go('results')">
+          <div class="history-icon">🔬</div>
+          <div style="flex:1;">
+            <div class="history-name">Acne vulgaris — face</div>
+            <div class="history-meta">January 30, 2026 · 91% confidence</div>
+          </div>
+          <span class="badge badge-mild">Mild</span>
+          <span class="chevron">›</span>
+        </div>
+        <div class="history-row" onclick="go('results')">
+          <div class="history-icon">🔬</div>
+          <div style="flex:1;">
+            <div class="history-name">Tinea versicolor — back</div>
+            <div class="history-meta">January 8, 2026 · 72% confidence</div>
+          </div>
+          <span class="badge badge-check">Review</span>
+          <span class="chevron">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

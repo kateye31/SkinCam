@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkinCam - Analyze</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --purple: #613DC1;
+    --lavender: #9CA3DB;
+    --black: #0D160B;
+    --gray: #6b7280;
+    --gray-light: #f3f4f6;
+    --border: #e5e7eb;
+    --nav-h: 64px;
+}
+
+
+    /* ── FIXED NAV ── */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3rem;
+    height: var(--nav-h);
+    border-bottom: 1px solid var(--border);
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+
+  .nav-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--black);
+    cursor: pointer;
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+  }
+
+  .nav-logo em { font-style: italic; color: var(--purple); }
+
+  .nav-links { display: flex; align-items: center; gap: 1.75rem; }
+
+  .nav-links a {
+    font-size: 0.875rem;
+    color: var(--gray);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+
+  .nav-links a:hover { color: var(--black); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.25rem;
+    border-radius: 100px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn-primary { background: var(--purple); color: #fff; }
+  .btn-primary:hover { background: #5234a8; }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--black);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: #aaa; }
+
+  /* ── PAGES ── */
+  .page { display: none; min-height: 100vh; flex-direction: column; padding-top: var(--nav-h); }
+  .page.active { display: flex; }
+
+
+
+/* ─────────────────────────────────────────────
+     UPLOAD
+  ───────────────────────────────────────────── */
+  .upload-wrap {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    padding: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+    align-items: start;
+  }
+
+  .page-title { font-family: 'Fraunces', serif; font-size: 1.75rem; font-weight: 300; letter-spacing: -0.025em; margin-bottom: 0.35rem; }
+  .page-sub { font-size: 0.875rem; color: var(--gray); font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; }
+
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 16px;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    padding: 2.5rem;
+    background: var(--gray-light);
+  }
+
+  .upload-zone:hover { border-color: var(--purple); background: rgba(97,61,193,0.04); }
+  .upload-zone.has-preview { padding: 0; background: transparent; border-style: solid; }
+  .upload-zone-icon { font-size: 2rem; margin-bottom: 0.25rem; }
+  .upload-zone-text { font-size: 0.9rem; font-weight: 500; color: var(--black); }
+  .upload-zone-sub { font-size: 0.78rem; color: var(--gray); }
+
+  .upload-preview-img { width: 100%; height: 100%; object-fit: cover; min-height: 240px; border-radius: 14px; display: none; }
+  .upload-zone.has-preview .upload-preview-img { display: block; }
+  .upload-zone.has-preview .upload-placeholder { display: none; }
+
+  .upload-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.75rem; }
+
+  .method-btn {
+    padding: 0.6rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.8rem;
+    color: var(--gray);
+    cursor: pointer;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.15s;
+    font-weight: 400;
+  }
+
+  .method-btn:hover { border-color: var(--purple); color: var(--purple); }
+
+  .panel-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--gray); margin-bottom: 0.65rem; }
+
+  .chip-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+
+  .chip {
+    padding: 0.4rem 0.85rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.78rem;
+    color: var(--gray);
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.15s;
+    font-weight: 400;
+  }
+
+  .chip:hover { border-color: var(--purple); color: var(--purple); }
+  .chip.selected { background: var(--purple); border-color: var(--purple); color: #fff; font-weight: 500; }
+
+  .upload-submit {
+    width: 100%;
+    padding: 0.8rem;
+    background: var(--purple);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.15s;
+  }
+
+  .upload-submit:hover { background: #5234a8; }
+
+  #file-input { display: none; }
+
+  /* ─────────────────────────────────────────────
+     PROCESSING
+  ───────────────────────────────────────────── */
+  .processing-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 3rem;
+    text-align: center;
+  }
+
+  .loader-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 3px solid var(--border);
+    border-top-color: var(--purple);
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .processing-title { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 300; letter-spacing: -0.02em; color: var(--black); }
+  .processing-sub { font-size: 0.875rem; color: var(--gray); font-weight: 300; }
+
+  .step-list { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; max-width: 300px; text-align: left; }
+
+  .step-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: #ccc; padding: 0.35rem 0; }
+  .step-item.done { color: var(--gray); }
+  .step-item.active { color: var(--black); font-weight: 500; }
+
+  .step-dot {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    flex-shrink: 0;
+    color: #ccc;
+  }
+
+  .step-item.done .step-dot { background: var(--purple); border-color: var(--purple); color: #fff; font-size: 0.6rem; }
+  .step-item.active .step-dot { border-color: var(--purple); color: var(--purple); }
+
+  .progress-bar { width: 100%; max-width: 300px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--purple); border-radius: 2px; width: 0; transition: width 0.6s ease; }
+
+
+</style>
+</head>
+
+<body>
+
+<nav>
+      <a href = "/" class = "nav-logo">Skin<em>Cam</em></a>
+  <div class="nav-links">
+    <a href= "/">Analyze</a>
+    <a href="/">Find a doctor</a>
+    <a href="/">Log in</a>
+    <button class="btn btn-primary" onclick = "window.location.href='/auth'">Get started</button>
+  </div>
+</nav>
+  
+
+
+
+<!-- ══════ UPLOAD ══════ -->
+<div class="page active" id="upload">
+<form action = "/analyze" method="POST" enctype="multipart/form-data">
+  <input type="file" name= "file" id="file-input" accept="image/*" onchange="handleUpload(event)">
+
+  <div class="upload-wrap">
+    <div>
+      <h1 class="page-title">Upload a photo</h1>
+      <p class="page-sub">Use a clear, well-lit image of the affected skin area for best results.</p>
+
+      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+        <div class="upload-placeholder">
+          <div class="upload-zone-icon">🖼</div>
+          <div class="upload-zone-text">Click or drag to upload</div>
+          <div class="upload-zone-sub">JPG, PNG, HEIC — up to 20 MB</div>
+        </div>
+        <img class="upload-preview-img" id="preview-img" src="" alt="Preview">
+      </div>
+
+      <div class="upload-methods">
+        <button type = "button" class="method-btn" onclick="document.getElementById('file-input').click()">📁 Choose file</button>
+        <button type = "button" class="method-btn">📷 Use camera</button>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="page-title" style="font-size:1.35rem;margin-bottom:0.35rem;">Describe your symptoms</h2>
+      <p class="page-sub">Select any that apply to improve accuracy.</p>
+
+      <div class="panel-label">Symptoms</div>
+      <div class="chip-grid">
+        <button type = "button" class="chip" onclick="toggleChip(this)">Itching</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Redness</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Dry / flaky</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Swelling</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Blistering</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Burning</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Pain / tender</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Oozing</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Discoloration</button>
+      </div>
+
+      <div class="panel-label">Affected area</div>
+      <div class="chip-grid">
+        <button type = "button" class="chip" onclick="toggleChip(this)">Face</button>
+        <button type = "button"class="chip" onclick="toggleChip(this)">Scalp</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Arms</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Torso</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Legs</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Hands</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Back</button>
+        <button type = "button" class="chip" onclick="toggleChip(this)">Feet</button>
+      </div>
+
+      <div class="panel-label">Duration</div>
+      <div class="chip-grid" id="dur-group">
+        <button type = "button" class="chip" onclick="selectOne(this,'dur-group')">Days</button>
+        <button type = "button" class="chip" onclick="selectOne(this,'dur-group')">Weeks</button>
+        <button type = "button" class="chip" onclick="selectOne(this,'dur-group')">Months</button>
+        <button type = "button" class="chip" onclick="selectOne(this,'dur-group')">Years</button>
+      </div>
+
+      <button  type = "submit" class="upload-submit">Analyze my skin →</button>
+      <p style="font-size:0.73rem;color:var(--gray);text-align:center;margin-top:0.75rem;line-height:1.5;">Your photo is processed privately. Results are informational only.</p>
+    </div>
+  </div>
+  </form>
+</div>
+
+
+<!-- ══════ PROCESSING ══════ -->
+
+<div class="page" id="processing">
+  <div class="processing-wrap">
+    <div class="loader-ring"></div>
+
+    <div>
+      <h2 class="processing-title">Analyzing your skin…</h2>
+      <p class="processing-sub">This usually takes 8–12 seconds.</p>
+    </div>
+
+    <div class="step-list">
+      <div class="step-item done" id="s1"><div class="step-dot">✓</div> Image uploaded</div>
+      <div class="step-item active" id="s2"><div class="step-dot">◉</div> Running visual model</div>
+      <div class="step-item" id="s3"><div class="step-dot">3</div> Cross-referencing symptoms</div>
+      <div class="step-item" id="s4"><div class="step-dot">4</div> Generating report</div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog-fill"></div>
+    </div>
+  </div>
+</div>
+<script>
+
+  function handleUpload(e) {
+    console.log('file selected', e.target.files[0]);
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('preview-img').src = ev.target.result;
+      document.getElementById('upload-zone').classList.add('has-preview');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  const zone = document.getElementById('upload-zone');
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = 'var(--purple)'; });
+  zone.addEventListener('dragleave', () => { zone.style.borderColor = ''; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.style.borderColor = '';
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const r = new FileReader();
+      r.onload = ev => {
+        document.getElementById('preview-img').src = ev.target.result;
+        zone.classList.add('has-preview');
+      };
+      r.readAsDataURL(file);
+    }
+  });
+
+function toggleChip(el) { el.classList.toggle('selected'); }
+
+  function selectOne(el, groupId) {
+    document.querySelectorAll('#' + groupId + ' .chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+
+</script>
+
+  </body>
+</html>
