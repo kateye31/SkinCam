@@ -1,30 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+   
 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --purple: #613DC1;
+    --lavender: #9CA3DB;
+    --black: #0D160B;
+    --gray: #6b7280;
+    --gray-light: #f3f4f6;
+    --border: #e5e7eb;
+    --nav-h: 64px;
+}
+
+html { font-size: 16px; }
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #fff;
+    color: var(--black);
+    min-height: 100vh;
+}
+
+
+
+/* ── FIXED NAV ── */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3rem;
+    height: var(--nav-h);
+    border-bottom: 1px solid var(--border);
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+
+  .nav-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--black);
+    cursor: pointer;
+    letter-spacing: -0.02em;
+    flex-shrink: 0;
+  }
+
+  .nav-logo em { font-style: italic; color: var(--purple); }
+
+  .nav-links { display: flex; align-items: center; gap: 1.75rem; }
+
+  .nav-links a {
+    font-size: 0.875rem;
+    color: var(--gray);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+
+  .nav-links a:hover { color: var(--black); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.25rem;
+    border-radius: 100px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn-primary { background: var(--purple); color: #fff; }
+  .btn-primary:hover { background: #5234a8; }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--black);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: #aaa; }
+
+  /* ── PAGES ── */
+  .page { display: none; min-height: 100vh; flex-direction: column; padding-top: var(--nav-h); }
+  .page.active { display: flex; }
+  
+.account-wrap {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .sidebar { border-right: 1px solid var(--border); padding: 2rem 1.25rem; display: flex; flex-direction: column; gap: 1.75rem; }
+
+  .avatar-block { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+
+  .avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: rgba(97,61,193,0.1);
+    border: 1px solid rgba(97,61,193,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem;
+    color: var(--purple);
+  }
+
+  .avatar-name { font-size: 0.9rem; font-weight: 500; color: var(--black); }
+  .avatar-email { font-size: 0.75rem; color: var(--gray); }
+
+  .sidebar-nav { display: flex; flex-direction: column; gap: 0.15rem; }
+
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--gray);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.15s;
+    text-align: left;
+    width: 100%;
+    font-weight: 400;
+  }
+
+  .sidebar-link:hover { background: var(--gray-light); color: var(--black); }
+  .sidebar-link.active { background: rgba(97,61,193,0.08); color: var(--purple); font-weight: 500; }
+
+  .account-main { padding: 2rem 2.5rem; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+
+  .stat-card { padding: 1rem; border: 1px solid var(--border); border-radius: 10px; }
+
+  .stat-val { font-family: 'Fraunces', serif; font-size: 1.75rem; font-weight: 300; color: var(--black); letter-spacing: -0.02em; line-height: 1; margin-bottom: 0.3rem; }
+  .stat-label { font-size: 0.75rem; color: var(--gray); }
+
+  .history-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .history-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .history-row:hover { border-color: var(--purple); background: rgba(97,61,193,0.03); }
+
+  .history-icon { width: 38px; height: 38px; border-radius: 8px; background: var(--gray-light); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .history-name { font-size: 0.875rem; font-weight: 500; color: var(--black); }
+  .history-meta { font-size: 0.75rem; color: var(--gray); margin-top: 0.1rem; }
+
+  .badge { padding: 0.25rem 0.65rem; border-radius: 100px; font-size: 0.7rem; font-weight: 500; margin-left: auto; flex-shrink: 0; }
+  .badge-mild { background: #ecfdf5; color: #16a34a; }
+  .badge-mod { background: #eff6ff; color: #2563eb; }
+  .badge-check { background: rgba(97,61,193,0.08); color: var(--purple); }
+
+  .chevron { color: #ccc; font-size: 0.9rem; margin-left: 0.25rem; }
+
+.page-title { font-family: 'Fraunces', serif; font-size: 1.75rem; font-weight: 300; letter-spacing: -0.025em; margin-bottom: 0.35rem; }
+.page-sub { font-size: 0.875rem; color: var(--gray); font-weight: 300; line-height: 1.6; margin-bottom: 1.5rem; }
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--gray);
+    font-size: 0.875rem;
+}
+
+.empty-state a {
+    color: var(--purple);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+
+
+</style>
+</head>
+<body>
 <nav>
-      <a href = "/" class = "nav-logo">Skin<em>Cam</em></div>
+      <a href = "/" class = "nav-logo">Skin<em>Cam</em></a>
   <div class="nav-links">
-    <a href= "/">Analyze</a>
+    <a href= "/analyze">Analyze</a>
     <a href="/">Find a doctor</a>
-    <a href="/">Log in</a>
-    <button class="btn btn-primary" onclick = "window.location.href='/auth'">Get started</button>
+    <a href="/logout">Log out</a>
   </div>
 </nav>
 
 
 <!-- ══════ ACCOUNT ══════ -->
-<div class="page" id="account">
+<div style="margin-top: var(--nav-h); min-height: calc(100vh - var(--nav-h));">
   <div class="account-wrap">
     <div class="sidebar">
       <div class="avatar-block">
-        <div class="avatar">A</div>
-        <div class="avatar-name">Alex Johnson</div>
-        <div class="avatar-email">alex@email.com</div>
+        <div class="avatar">{{current_user.first_name[0] | upper}}</div>
+        <div class="avatar-name">{{current_user.first_name}} {{current_user.last_name}}</div>
+        <div class="avatar-email">{{current_user.email}}</div>
       </div>
       <div class="sidebar-nav">
         <button class="sidebar-link active">📋 Scan history</button>
         <button class="sidebar-link">👤 Profile</button>
         <button class="sidebar-link">🔒 Privacy &amp; data</button>
         <button class="sidebar-link">⚙️ Settings</button>
-        <button class="sidebar-link" onclick="go('landing')" style="margin-top:1rem;">← Log out</button>
+        <a href = "/logout" class="sidebar-link" style="margin-top:1rem; color: var(--gray);">← Log out</a>
       </div>
     </div>
 
@@ -34,57 +245,41 @@
 
       <div class="stats-row">
         <div class="stat-card">
-          <div class="stat-val">7</div>
+          <div class="stat-val">{{scans | length}}</div>
           <div class="stat-label">Total scans</div>
         </div>
         <div class="stat-card">
-          <div class="stat-val">3</div>
+          <div class="stat-val">{{scans |selectarr('severity', 'ne', 'Mild')|list|length }}</div>
           <div class="stat-label">Conditions flagged</div>
         </div>
         <div class="stat-card">
-          <div class="stat-val">Jan '25</div>
-          <div class="stat-label">Member since</div>
+          <div class="stat-val">{{scans[0].created_at.strftime('%b %d') if scans else '-'}}</div>
+          <div class="stat-label">Last scan</div>
         </div>
       </div>
 
       <div class="history-list">
-        <div class="history-row" onclick="go('results')">
-          <div class="history-icon">🔬</div>
-          <div style="flex:1;">
-            <div class="history-name">Atopic Eczema — forearm</div>
-            <div class="history-meta">March 26, 2026 · 78% confidence</div>
-          </div>
-          <span class="badge badge-mild">Mild</span>
-          <span class="chevron">›</span>
+        {% for scan in scans %}
+    <div class="history-row">
+        <div class="history-icon">🔬</div>
+        <div style="flex:1;">
+            <div class="history-name">{{ scan.condition }}</div>
+            <div class="history-meta">{{ scan.created_at.strftime('%B %d, %Y') }} · {{ scan.confidence }} confidence</div>
         </div>
-        <div class="history-row" onclick="go('results')">
-          <div class="history-icon">🔬</div>
-          <div style="flex:1;">
-            <div class="history-name">Contact Dermatitis — wrist</div>
-            <div class="history-meta">February 14, 2026 · 83% confidence</div>
-          </div>
-          <span class="badge badge-mod">Moderate</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="history-row" onclick="go('results')">
-          <div class="history-icon">🔬</div>
-          <div style="flex:1;">
-            <div class="history-name">Acne vulgaris — face</div>
-            <div class="history-meta">January 30, 2026 · 91% confidence</div>
-          </div>
-          <span class="badge badge-mild">Mild</span>
-          <span class="chevron">›</span>
-        </div>
-        <div class="history-row" onclick="go('results')">
-          <div class="history-icon">🔬</div>
-          <div style="flex:1;">
-            <div class="history-name">Tinea versicolor — back</div>
-            <div class="history-meta">January 8, 2026 · 72% confidence</div>
-          </div>
-          <span class="badge badge-check">Review</span>
-          <span class="chevron">›</span>
-        </div>
+        <span class="badge badge-mild">{{ scan.severity }}</span>
+        <span class="chevron">,</span>
+    </div>
+    {% endfor %}
+{% else %}
+        <div class="empty-state">
+          <p>No scans yet.</p>
+          <p style="margin-top: 0.5rem;"><a href="/analyze">Upload your first image →</a></p>
       </div>
+      {% endif %}
     </div>
   </div>
 </div>
+
+ </body>
+</html>
+

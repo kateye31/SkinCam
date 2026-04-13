@@ -273,7 +273,7 @@
 <!-- ══════ UPLOAD ══════ -->
 <div class="page active" id="upload">
 <form action = "/analyze" method="POST" enctype="multipart/form-data">
-  <input type="file" name= "file" id="file-input" accept="image/*" onchange="handleUpload(event)">
+  <input type="file" name= "file" id="file-input" accept="image/*" capture="enviroment" onchange="handleUpload(event)">
 
   <div class="upload-wrap">
     <div>
