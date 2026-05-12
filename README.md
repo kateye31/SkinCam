@@ -6,10 +6,10 @@ SkinCam is a full-stack web application that uses AI-powered image analysis to e
 
 ## Features
 
-- 📸 **Skin scan analysis** — Upload a photo and receive an AI-generated breakdown of your skin's condition
-- 🧴 **Personalized recommendations** — Get product and routine suggestions tailored to your skin type and concerns
-- 🗂️ **Scan history tracking** — All past scans are saved per user via Supabase so you can track changes over time
-- 🤖 **Consistent AI output** — Structured JSON prompts ensure reliable, parseable responses from the Claude Vision API
+-  **Skin scan analysis** — Upload a photo and receive an AI-generated breakdown of your skin's condition
+-  **Personalized recommendations** — Get product and routine suggestions tailored to your skin type and concerns
+- **Scan history tracking** — All past scans are saved per user via Supabase so you can track changes over time
+  - **Consistent AI output** — Structured JSON prompts ensure reliable, parseable responses from the Claude Vision API
 
 ---
 
@@ -64,20 +64,6 @@ flask run
 ```
 
 Visit `http://localhost:5000` in your browser.
-
----
-
-## Project Structure
-
-```
-skincam/
-├── app.py              # Flask app entry point
-├── routes/             # Route handlers
-├── templates/          # HTML templates
-├── static/             # CSS, JS, assets
-├── .env                # Environment variables (not committed)
-└── requirements.txt
-```
 
 ---
 
